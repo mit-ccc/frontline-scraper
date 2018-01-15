@@ -2,11 +2,10 @@
 
 import os
 
-from urllib.parse import urlparse
-
 from scrapy.item import Item, Field, ItemMeta
 
 from frontline.models import FilmHTML
+from frontline.utils import split_url_path
 
 
 class SQLAlchemyItemMeta(ItemMeta):
@@ -42,8 +41,7 @@ class FilmHTMLItem(SQLAlchemyItem):
     def from_res(cls, res):
         """Parse URL, get HTML.
         """
-        url = urlparse(res.url)
-        slug = url.path.strip('/').split('/')[-1]
+        slug = split_url_path(res.url)[-1]
 
         # TODO: Get title too.
         html = res.css('.page-meta--description').extract_first()
