@@ -102,13 +102,13 @@ class Film(Base):
 
     title = Column(String)
 
+    description = Column(String)
+
     pub_date = Column(Date)
 
     season = Column(Integer)
 
     episode = Column(Integer)
-
-    description = Column(String)
 
     @classmethod
     def from_html(cls, html):
@@ -118,10 +118,10 @@ class Film(Base):
             slug=html.slug,
             url=html.url,
             title=html.title(),
+            description=html.description(),
             pub_date=html.pub_date(),
             season=html.season(),
             episode=html.episode(),
-            description=html.description(),
         )
 
     @classmethod
