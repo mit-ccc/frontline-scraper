@@ -2,7 +2,7 @@
 
 from datetime import datetime as dt
 
-from sqlalchemy import Column, DateTime
+from sqlalchemy import Column, DateTime, String
 from sqlalchemy.ext.declarative import declarative_base
 
 from frontline.db import session

@@ -1,6 +1,4 @@
 
-# flake8: noqa
-
 # -*- coding: utf-8 -*-
 
 # Scrapy settings for fanfic project
