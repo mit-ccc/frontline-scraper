@@ -92,7 +92,7 @@ NEWSPIDER_MODULE = 'frontline.spiders'
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 
-LOG_LEVEL = 'WARNING'
+LOG_LEVEL = 'DEBUG'
 
 ROBOTSTXT_OBEY = False
 

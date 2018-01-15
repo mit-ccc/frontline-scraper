@@ -2,6 +2,8 @@
 
 from scrapy import Spider, Request
 
+from frontline.items import FilmHTMLItem
+
 
 class FilmSpider(Spider):
 
@@ -14,7 +16,7 @@ class FilmSpider(Spider):
         """
         # Scrape films.
         for url in res.css('.all-video a.list__item::attr(href)').extract():
-            yield Request(url, self.parse_film)
+            yield res.follow(url, self.parse_film)
 
         # Continue to the next page.
 
@@ -24,13 +26,13 @@ class FilmSpider(Spider):
         )
 
         if next_url:
-            yield Request(next_url)
+            yield res.follow(next_url)
 
     def parse_film(self, res):
         """Parse film profile page.
         """
-        desc = res.css('.page-meta--description').extract_first()
-        # TODO: item
+        # desc = res.css('.page-meta--description').extract_first()
+        yield FilmHTMLItem.from_res(res)
 
         # Scrape transcript.
 
@@ -40,7 +42,7 @@ class FilmSpider(Spider):
         )
 
         if transcript_url:
-            yield Request(transcript_url, self.parse_transcript)
+            yield res.follow(transcript_url, self.parse_transcript)
 
     def parse_transcript(self, res):
         """Parse film profile page.
