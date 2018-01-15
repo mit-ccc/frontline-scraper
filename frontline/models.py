@@ -39,7 +39,6 @@ class FilmHTML(Base, ScrapyItem):
     def selector(self):
         return Selector(text=self.html)
 
-    @cached_property
     def title(self):
         """Episode title.
         """
@@ -50,7 +49,6 @@ class FilmHTML(Base, ScrapyItem):
             .strip()
         )
 
-    @cached_property
     def pub_date(self):
         """Parse the publication date.
         """
@@ -62,7 +60,6 @@ class FilmHTML(Base, ScrapyItem):
 
         return dt_parse(raw).date()
 
-    @cached_property
     @try_or_none
     def season_episode(self):
         """Parse season / episode ints.
@@ -75,17 +72,14 @@ class FilmHTML(Base, ScrapyItem):
 
         return list(map(int, re.findall('[0-9]+', text)))
 
-    @cached_property
     @try_or_none
     def season(self):
-        return self.season_episode[0]
+        return self.season_episode()[0]
 
-    @cached_property
     @try_or_none
     def episode(self):
-        return self.season_episode[1]
+        return self.season_episode()[1]
 
-    @cached_property
     def description(self):
         """Description blurb.
         """
@@ -96,18 +90,6 @@ class FilmHTML(Base, ScrapyItem):
         )
 
         return ps[0]
-
-    def parse(self):
-        """Metadata row.
-        """
-        return Film(
-            slug=self.slug,
-            title=self.title,
-            pub_date=self.pub_date,
-            season=self.season,
-            episode=self.episode,
-            description=self.description,
-        )
 
 
 class Film(Base):
@@ -129,11 +111,25 @@ class Film(Base):
     description = Column(String)
 
     @classmethod
+    def from_html(cls, html):
+        """Map fields from FilmHTML.
+        """
+        return cls(
+            slug=html.slug,
+            url=html.url,
+            title=html.title(),
+            pub_date=html.pub_date(),
+            season=html.season(),
+            episode=html.episode(),
+            description=html.description(),
+        )
+
+    @classmethod
     def load(cls):
         """Parse rows from HTML.
         """
         for html in tqdm(FilmHTML.query.all()):
-            session.add(html.parse())
+            session.add(cls.from_html(html))
 
         session.commit()
 
