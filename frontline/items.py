@@ -43,7 +43,6 @@ class FilmHTMLItem(SQLAlchemyItem):
         """
         slug = split_url_path(res.url)[-1]
 
-        # TODO: Get title too.
-        html = res.css('.page-meta--description').extract_first()
+        html = res.css('article').extract_first()
 
         return cls(slug=slug, url=res.url, html=html)
