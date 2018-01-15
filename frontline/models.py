@@ -26,3 +26,13 @@ class FilmHTML(Base, ScrapyItem):
     slug = Column(String, primary_key=True)
 
     html = Column(String, nullable=False)
+
+
+class TranscriptHTML(Base, ScrapyItem):
+
+    __tablename__ = 'transcript_html'
+
+    # TODO: FK?
+    slug = Column(String, primary_key=True)
+
+    html = Column(String, nullable=False)

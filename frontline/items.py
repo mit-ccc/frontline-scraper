@@ -4,7 +4,7 @@ import os
 
 from scrapy.item import Item, Field, ItemMeta
 
-from frontline.models import FilmHTML
+from frontline.models import FilmHTML, TranscriptHTML
 from frontline.utils import split_url_path
 
 
@@ -44,5 +44,20 @@ class FilmHTMLItem(SQLAlchemyItem):
         slug = split_url_path(res.url)[-1]
 
         html = res.css('article').extract_first()
+
+        return cls(slug=slug, url=res.url, html=html)
+
+
+class TranscriptHTMLItem(SQLAlchemyItem):
+
+    model = TranscriptHTML
+
+    @classmethod
+    def from_res(cls, res):
+        """Parse URL, get HTML.
+        """
+        slug = split_url_path(res.url)[-2]
+
+        html = res.css('.article__copy--transcript').extract_first()
 
         return cls(slug=slug, url=res.url, html=html)
