@@ -46,4 +46,4 @@ class FilmHTMLItem(SQLAlchemyItem):
         # TODO: Get title too.
         html = res.css('.page-meta--description').extract_first()
 
-        return cls(slug=slug, html=html)
+        return cls(slug=slug, url=res.url, html=html)

@@ -13,6 +13,9 @@ Base.query = session.query_property()
 
 
 class ScrapyItem:
+
+    url = Column(String, nullable=False)
+
     scraped_at = Column(DateTime, default=dt.utcnow, nullable=False)
 
 

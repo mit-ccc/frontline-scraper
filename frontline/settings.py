@@ -98,6 +98,6 @@ ROBOTSTXT_OBEY = False
 
 DOWNLOAD_DELAY = 3
 
-# ITEM_PIPELINES = {
-   # 'fanfic.pipelines.SQLAlchemyPipeline': 100,
-# }
+ITEM_PIPELINES = {
+   'frontline.pipelines.SQLAlchemyPipeline': 100,
+}
