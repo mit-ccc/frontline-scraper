@@ -4,13 +4,13 @@ import re
 
 from datetime import datetime as dt
 from dateutil.parser import parse as dt_parse
+from cached_property import cached_property
+from tqdm import tqdm
 
 from sqlalchemy import Column, DateTime, Date, String, Integer
 from sqlalchemy.ext.declarative import declarative_base
 
 from scrapy import Selector
-
-from cached_property import cached_property
 
 from frontline.db import session
 
@@ -92,6 +92,18 @@ class FilmHTML(Base, ScrapyItem):
 
         return ps[0]
 
+    def parse(self):
+        """Metadata row.
+        """
+        return Film(
+            slug=self.slug,
+            title=self.title,
+            pub_date=self.pub_date,
+            season=self.season,
+            episode=self.episode,
+            description=self.description,
+        )
+
 
 class Film(Base):
 
@@ -108,6 +120,14 @@ class Film(Base):
     episode = Column(Integer, nullable=False)
 
     description = Column(String, nullable=False)
+
+    @classmethod
+    def load(cls):
+        """Parse rows from HTML.
+        """
+        for html in tqdm(FilmHTML.query.all()):
+            session.add(html.parse())
+            session.commit()
 
 
 class TranscriptHTML(Base, ScrapyItem):

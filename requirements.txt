@@ -5,3 +5,4 @@ invoke
 sqlalchemy
 cached_property
 python-dateutil
+tqdm
