@@ -12,6 +12,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 from scrapy import Selector
 
+from frontline.utils import try_or_none
 from frontline.db import session
 
 
@@ -46,6 +47,7 @@ class FilmHTML(Base, ScrapyItem):
             self.selector
             .css('.film__tray-title::text')
             .extract_first()
+            .strip()
         )
 
     @cached_property
@@ -61,6 +63,7 @@ class FilmHTML(Base, ScrapyItem):
         return dt_parse(raw).date()
 
     @cached_property
+    @try_or_none
     def season_episode(self):
         """Parse season / episode ints.
         """
@@ -73,10 +76,12 @@ class FilmHTML(Base, ScrapyItem):
         return list(map(int, re.findall('[0-9]+', text)))
 
     @cached_property
+    @try_or_none
     def season(self):
         return self.season_episode[0]
 
     @cached_property
+    @try_or_none
     def episode(self):
         return self.season_episode[1]
 
@@ -111,15 +116,17 @@ class Film(Base):
 
     slug = Column(String, primary_key=True)
 
-    title = Column(String, nullable=False)
+    url = Column(String)
 
-    pub_date = Column(Date, nullable=False)
+    title = Column(String)
 
-    season = Column(Integer, nullable=False)
+    pub_date = Column(Date)
 
-    episode = Column(Integer, nullable=False)
+    season = Column(Integer)
 
-    description = Column(String, nullable=False)
+    episode = Column(Integer)
+
+    description = Column(String)
 
     @classmethod
     def load(cls):
@@ -127,7 +134,8 @@ class Film(Base):
         """
         for html in tqdm(FilmHTML.query.all()):
             session.add(html.parse())
-            session.commit()
+
+        session.commit()
 
 
 class TranscriptHTML(Base, ScrapyItem):
