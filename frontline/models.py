@@ -49,6 +49,7 @@ class FilmHTML(Base, ScrapyItem):
             .strip()
         )
 
+    @try_or_none
     def pub_date(self):
         """Parse the publication date.
         """
