@@ -17,7 +17,18 @@ from frontline.db import session
 from frontline.sources import GnipTweet
 
 
-Base = declarative_base()
+class _Base:
+
+    @classmethod
+    def columns(cls):
+        """Get a list of column names.
+
+        Returns: list
+        """
+        return [c.name for c in cls.__table__.columns]
+
+
+Base = declarative_base(cls=_Base)
 Base.query = session.query_property()
 
 
@@ -42,6 +53,8 @@ class FilmHTML(Base, ScrapyItem):
 
     def title(self):
         """Episode title.
+
+        Returns: str
         """
         return (
             self.selector
@@ -53,6 +66,8 @@ class FilmHTML(Base, ScrapyItem):
     @try_or_none
     def pub_date(self):
         """Parse the publication date.
+
+        Returns: datetime
         """
         raw = (
             self.selector
@@ -65,6 +80,8 @@ class FilmHTML(Base, ScrapyItem):
     @try_or_none
     def season_episode(self):
         """Parse season / episode ints.
+
+        Returns: (int, int)
         """
         text = (
             self.selector
@@ -84,6 +101,8 @@ class FilmHTML(Base, ScrapyItem):
 
     def description(self):
         """Description blurb.
+
+        Returns: str
         """
         ps = (
             self.selector
