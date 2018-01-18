@@ -7,3 +7,5 @@ cached_property
 python-dateutil
 tqdm
 iso8601
+ujson
+boltons

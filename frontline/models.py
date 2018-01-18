@@ -12,9 +12,8 @@ from sqlalchemy.ext.declarative import declarative_base
 
 from scrapy import Selector
 
-from frontline.utils import try_or_none
-from frontline.db import session
-from frontline.sources import GnipTweet
+from .utils import try_or_none
+from .db import session
 
 
 class _Base:
