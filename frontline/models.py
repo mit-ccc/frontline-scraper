@@ -7,7 +7,7 @@ from dateutil.parser import parse as dt_parse
 from cached_property import cached_property
 from tqdm import tqdm
 
-from sqlalchemy import Column, DateTime, Date, String, Integer
+from sqlalchemy import Column, DateTime, Date, String, Integer, Float
 from sqlalchemy.ext.declarative import declarative_base
 
 from scrapy import Selector
@@ -142,3 +142,40 @@ class TranscriptHTML(Base, ScrapyItem):
     slug = Column(String, primary_key=True)
 
     html = Column(String, nullable=False)
+
+
+class Tweet(Base):
+
+    __tablename__ = 'tweet'
+
+    id = Column(String, primary_key=True)
+
+    body = Column(String)
+
+    posted_time = Column(DateTime)
+
+    actor_id = Column(String)
+
+    actor_display_name = Column(String)
+
+    actor_summary = Column(String)
+
+    actor_preferred_username = Column(String)
+
+    actor_location = Column(String)
+
+    actor_language = Column(String)
+
+    location_display_name = Column(String)
+
+    location_name = Column(String)
+
+    location_country_code = Column(String)
+
+    location_twitter_country_code = Column(String)
+
+    location_twitter_place_type = Column(String)
+
+    lat = Column(Float)
+
+    lon = Column(Float)
