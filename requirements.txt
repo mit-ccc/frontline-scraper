@@ -6,3 +6,4 @@ sqlalchemy
 cached_property
 python-dateutil
 tqdm
+iso8601
