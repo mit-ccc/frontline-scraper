@@ -14,6 +14,7 @@ from scrapy import Selector
 
 from frontline.utils import try_or_none
 from frontline.db import session
+from frontline.sources import GnipTweet
 
 
 Base = declarative_base()
@@ -176,6 +177,6 @@ class Tweet(Base):
 
     location_twitter_place_type = Column(String)
 
-    lat = Column(Float)
+    geo_lat = Column(Float)
 
-    lon = Column(Float)
+    geo_lon = Column(Float)
