@@ -1,5 +1,7 @@
 
 ipython
+jupyter
+matplotlib
 scrapy
 invoke
 sqlalchemy
@@ -9,3 +11,5 @@ tqdm
 iso8601
 ujson
 boltons
+
+-e git+https://github.com/davidmcclure/litecoder.git#egg=litecoder
