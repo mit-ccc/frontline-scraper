@@ -24,25 +24,26 @@ class GnipJSONFile:
             for line in fh:
                 yield ujson.loads(line.strip())
 
-    def posts(self):
-        """Generate "post" tweets.
-        """
-        for tweet in self.tweets():
-            if tweet['verb'] == 'post':
-                yield tweet
-
     def db_mappings(self):
         """Generate Tweet mappings.
         """
         ids = set()
 
-        # TODO: Handle RTs, etc.
-        for i, post in enumerate(self.posts()):
+        for i, tweet in enumerate(self.tweets()):
 
+            # Skip duplicate ids.
             # TODO: Handle in db?
-            if post['id'] not in ids:
-                yield GnipTweet(post).db_mapping()
-                ids.add(post['id'])
+            if tweet['id'] in ids:
+                continue
+
+            tags = [r['tag'] for r in tweet['gnip']['matching_rules']]
+
+            # Skip tweets only matched by the keyword filter.
+            if tags[0] == 'fl_frontline_keyword' and len(tags) == 1:
+                continue
+
+            yield GnipTweet(tweet).db_mapping()
+            ids.add(tweet['id'])
 
     def load(self, n=10000):
         """Bulk-insert database rows.
